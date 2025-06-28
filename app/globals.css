@@ -145,10 +145,6 @@ html {
     right: 0;
     z-index: 1000;
   }
-
-  main {
-    padding-top: 4rem;
-  }
 }
 
 /* Accessibility improvements */

@@ -13,8 +13,7 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "Ralhum Sports - Sri Lanka's #1 Sports Equipment Distributor",
   description:
-    "Exclusive distributor of Gray-Nicolls, Gilbert, Grays & Molten. 25+ years of athletic excellence in Sri Lanka.",
-    generator: 'v0.dev'
+    "Exclusive distributor of Gray-Nicolls, Gilbert, Grays & Molten. 25+ years of athletic excellence in Sri Lanka."
 }
 
 export default function RootLayout({

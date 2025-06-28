@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { MessageCircle, X } from "lucide-react"
+import { SiWhatsapp } from "react-icons/si"
 import { Button } from "@/components/ui/button"
 
 export default function FloatingWhatsApp() {
@@ -20,8 +21,17 @@ export default function FloatingWhatsApp() {
     return () => clearTimeout(timer)
   }, [])
 
+  const handleMouseEnter = () => {
+    setShowTooltip(true)
+  }
+
+  const handleMouseLeave = () => {
+    setShowTooltip(false)
+  }
+
   const handleWhatsAppClick = () => {
     const message = `Hello Ralhum Sports! 
+
 
 I'm interested in learning more about your sports equipment. Please contact me at your earliest convenience.
 
@@ -54,10 +64,12 @@ Thank you!`
       {/* WhatsApp Button */}
       <Button
         onClick={handleWhatsAppClick}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
         className="w-14 h-14 rounded-full bg-[#25D366] hover:bg-[#25D366]/90 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110"
         aria-label="Chat on WhatsApp"
       >
-        <MessageCircle className="w-7 h-7 text-white" />
+        <SiWhatsapp className="text-white w-8 h-8" />
       </Button>
     </div>
   )
