@@ -1,39 +1,39 @@
-"use client"
+"use client";
 
-import { Product } from "@/types/product"
-import { useCart } from "@/hooks/use-cart"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Star, ShoppingCart, Eye, Heart } from "lucide-react"
-import { formatPrice, getProductPrice } from "@/lib/products"
-import Link from "next/link"
-import { useState } from "react"
+import { Product } from "@/types/product";
+import { useCart } from "@/hooks/use-cart";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Star, ShoppingCart, Eye, Heart } from "lucide-react";
+import { formatPrice, getProductPrice } from "@/lib/products";
+import Link from "next/link";
+import { useState } from "react";
 
 interface ProductCardProps {
-  product: Product
-  variant?: "grid" | "list"
-  showBrand?: boolean
-  showCategory?: boolean
+  product: Product;
+  variant?: "grid" | "list";
+  showBrand?: boolean;
+  showCategory?: boolean;
 }
 
 export function ProductCard({
   product,
   variant = "grid",
   showBrand = true,
-  showCategory = true
+  showCategory = true,
 }: ProductCardProps) {
-  const [isWishlisted, setIsWishlisted] = useState(false)
-  const { addItem } = useCart()
-  const price = getProductPrice(product)
-  const primaryImage = product.images[0]
-  const inStock = product.variants.some(v => v.inventory > 0)
+  const [isWishlisted, setIsWishlisted] = useState(false);
+  const { addItem } = useCart();
+  const price = getProductPrice(product);
+  const primaryImage = product.images[0];
+  const inStock = product.variants.some((v) => v.inventory > 0);
 
   const handleAddToCart = () => {
     if (product.variants[0] && inStock) {
-      addItem(product, product.variants[0], 1)
+      addItem(product, product.variants[0], 1);
     }
-  }
+  };
 
   if (variant === "list") {
     return (
@@ -60,7 +60,7 @@ export function ProductCard({
                     OUT OF STOCK
                   </Badge>
                 )}
-                {product.variants.some(v => v.compareAtPrice) && (
+                {product.variants.some((v) => v.compareAtPrice) && (
                   <Badge className="bg-[#FF3D00] text-white font-bold text-xs">
                     SALE
                   </Badge>
@@ -117,7 +117,9 @@ export function ProductCard({
                       <Star
                         key={i}
                         className={`w-4 h-4 ${
-                          i < 4 ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
+                          i < 4
+                            ? "fill-yellow-400 text-yellow-400"
+                            : "text-gray-300"
                         }`}
                       />
                     ))}
@@ -133,9 +135,12 @@ export function ProductCard({
                         {formatPrice(price.min)} - {formatPrice(price.max)}
                       </span>
                     )}
-                    {product.variants.some(v => v.compareAtPrice) && (
+                    {product.variants.some((v) => v.compareAtPrice) && (
                       <span className="text-sm text-gray-500 line-through ml-2">
-                        {formatPrice(product.variants.find(v => v.compareAtPrice)?.compareAtPrice || 0)}
+                        {formatPrice(
+                          product.variants.find((v) => v.compareAtPrice)
+                            ?.compareAtPrice || 0,
+                        )}
                       </span>
                     )}
                   </div>
@@ -162,6 +167,7 @@ export function ProductCard({
                     size="sm"
                     className="bg-[#FF3D00] hover:bg-[#FF3D00]/90 text-white"
                     disabled={!inStock}
+                    onClick={handleAddToCart}
                   >
                     <ShoppingCart className="w-4 h-4 mr-2" />
                     {inStock ? "Add to Cart" : "Out of Stock"}
@@ -183,7 +189,7 @@ export function ProductCard({
           </div>
         </CardContent>
       </Card>
-    )
+    );
   }
 
   return (
@@ -209,7 +215,7 @@ export function ProductCard({
                 OUT OF STOCK
               </Badge>
             )}
-            {product.variants.some(v => v.compareAtPrice) && (
+            {product.variants.some((v) => v.compareAtPrice) && (
               <Badge className="bg-[#FF3D00] text-white font-bold text-xs">
                 SALE
               </Badge>
@@ -243,15 +249,13 @@ export function ProductCard({
               </Button>
             </Link>
             <Button
+              size="sm"
               className="bg-[#FF3D00] hover:bg-[#FF3D00]/90 text-white"
               disabled={!inStock}
               onClick={handleAddToCart}
             >
               <ShoppingCart className="w-4 h-4 mr-2" />
-              {inStock ? "Add to Cart" : "Out of Stock"}
-            </Button>
-              {inStock ? "Add to Cart" : "Out of Stock"}
-            </Button>
+              Add to Cart
             </Button>
           </div>
         </div>
@@ -313,9 +317,12 @@ export function ProductCard({
                   {formatPrice(price.min)} - {formatPrice(price.max)}
                 </span>
               )}
-              {product.variants.some(v => v.compareAtPrice) && (
+              {product.variants.some((v) => v.compareAtPrice) && (
                 <span className="text-sm text-gray-500 line-through ml-2">
-                  {formatPrice(product.variants.find(v => v.compareAtPrice)?.compareAtPrice || 0)}
+                  {formatPrice(
+                    product.variants.find((v) => v.compareAtPrice)
+                      ?.compareAtPrice || 0,
+                  )}
                 </span>
               )}
             </div>
@@ -357,5 +364,5 @@ export function ProductCard({
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
