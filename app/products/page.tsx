@@ -1,132 +1,78 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { Search, Star, Award, Trophy, Target, ArrowRight, Eye } from "lucide-react"
+import { useState, useEffect } from "react";
+import { ProductsResponse, ProductFilters, ProductSort } from "@/types/product";
+import { getProducts, getFeaturedProducts } from "@/lib/products";
+import { ProductCard } from "@/components/product-card";
+import { ProductFilters as FiltersComponent } from "@/components/product-filters";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Grid3X3,
+  List,
+  Filter,
+  Package,
+  Star,
+  TrendingUp,
+  ShoppingBag,
+  Zap,
+} from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 
-const brands = [
-  {
-    name: "Gray-Nicolls",
-    category: "Cricket",
-    heritage: "Since 1855",
-    description: "World's finest cricket equipment",
-    image: "/placeholder.svg?height=200&width=300",
-    color: "from-[#003DA5] to-[#1A1A1A]",
-    icon: Trophy,
-    products: ["Cricket Bats", "Protective Gear", "Gloves", "Pads"],
-    featured: true,
-  },
-  {
-    name: "Gilbert",
-    category: "Rugby",
-    heritage: "Since 1823",
-    description: "Official Rugby World Cup supplier",
-    image: "/placeholder.svg?height=200&width=300",
-    color: "from-[#FF3D00] to-[#1A1A1A]",
-    icon: Award,
-    products: ["Rugby Balls", "Training Equipment", "Protective Gear", "Accessories"],
-    featured: true,
-  },
-  {
-    name: "Molten",
-    category: "Basketball & Volleyball",
-    heritage: "Innovation Leader",
-    description: "Official tournament supplier worldwide",
-    image: "/placeholder.svg?height=200&width=300",
-    color: "from-[#FFD700] to-[#1A1A1A]",
-    icon: Target,
-    products: ["Basketballs", "Volleyballs", "Training Equipment", "Court Accessories"],
-    featured: true,
-  },
-  {
-    name: "Grays",
-    category: "Hockey",
-    heritage: "Field Sports Excellence",
-    description: "Trusted by Olympic athletes",
-    image: "/placeholder.svg?height=200&width=300",
-    color: "from-[#AEEA00] to-[#1A1A1A]",
-    icon: Star,
-    products: ["Hockey Sticks", "Protective Equipment", "Balls", "Training Gear"],
-    featured: true,
-  },
-  {
-    name: "Dunlop",
-    category: "Tennis & Squash",
-    heritage: "Global Recognition",
-    description: "Premium racquet sports equipment",
-    image: "/placeholder.svg?height=200&width=300",
-    color: "from-[#FF3D00] to-[#003DA5]",
-    icon: Trophy,
-    products: ["Tennis Rackets", "Squash Rackets", "Balls", "Accessories"],
-    featured: false,
-  },
-  {
-    name: "Slazenger",
-    category: "Multi-Sport",
-    heritage: "Wimbledon Heritage",
-    description: "Official Wimbledon ball supplier",
-    image: "/placeholder.svg?height=200&width=300",
-    color: "from-[#AEEA00] to-[#FF3D00]",
-    icon: Award,
-    products: ["Tennis Equipment", "Cricket Gear", "Training Equipment", "Accessories"],
-    featured: false,
-  },
-  {
-    name: "Babolat",
-    category: "Tennis & Badminton",
-    heritage: "Racquet Innovation",
-    description: "Professional racquet sports leader",
-    image: "/placeholder.svg?height=200&width=300",
-    color: "from-[#003DA5] to-[#AEEA00]",
-    icon: Star,
-    products: ["Tennis Rackets", "Badminton Rackets", "Strings", "Accessories"],
-    featured: false,
-  },
-  {
-    name: "Carlton",
-    category: "Badminton",
-    heritage: "Shuttlecock Specialists",
-    description: "Premium badminton equipment",
-    image: "/placeholder.svg?height=200&width=300",
-    color: "from-[#FFD700] to-[#FF3D00]",
-    icon: Target,
-    products: ["Badminton Rackets", "Shuttlecocks", "Court Equipment", "Training Gear"],
-    featured: false,
-  },
-]
+export default function StorePage() {
+  const [productsData, setProductsData] = useState<ProductsResponse | null>(
+    null,
+  );
+  const [loading, setLoading] = useState(true);
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [showFilters, setShowFilters] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [filters, setFilters] = useState<ProductFilters>({});
+  const [sort, setSort] = useState<ProductSort>({
+    field: "featured",
+    direction: "desc",
+  });
 
-const categories = [
-  "All Categories",
-  "Cricket",
-  "Rugby",
-  "Basketball & Volleyball",
-  "Hockey",
-  "Tennis & Squash",
-  "Badminton",
-  "Multi-Sport",
-]
+  // Simulate loading state for better UX
+  useEffect(() => {
+    setLoading(true);
+    const timer = setTimeout(() => {
+      const data = getProducts(filters, sort, currentPage, 12);
+      setProductsData(data);
+      setLoading(false);
+    }, 300);
 
-export default function ProductsPage() {
-  const [selectedCategory, setSelectedCategory] = useState("All Categories")
-  const [searchTerm, setSearchTerm] = useState("")
+    return () => clearTimeout(timer);
+  }, [filters, sort, currentPage]);
 
-  const filteredBrands = brands.filter((brand) => {
-    const matchesCategory = selectedCategory === "All Categories" || brand.category === selectedCategory
-    const matchesSearch =
-      brand.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      brand.category.toLowerCase().includes(searchTerm.toLowerCase())
-    return matchesCategory && matchesSearch
-  })
+  const featuredProducts = getFeaturedProducts(4);
 
-  const featuredBrands = brands.filter((brand) => brand.featured)
+  const handleFiltersChange = (newFilters: ProductFilters) => {
+    setFilters(newFilters);
+    setCurrentPage(1); // Reset to first page when filters change
+  };
+
+  const handleSortChange = (newSort: ProductSort) => {
+    setSort(newSort);
+    setCurrentPage(1); // Reset to first page when sort changes
+  };
+
+  const handleResetFilters = () => {
+    setFilters({});
+    setCurrentPage(1);
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
     <main className="min-h-screen pt-16">
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-br from-[#003DA5] to-[#1A1A1A] text-white relative overflow-hidden">
+      <section className="py-16 bg-gradient-to-br from-[#003DA5] to-[#1A1A1A] text-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-20 left-20 w-32 h-32 bg-[#FFD700] rounded-full blur-3xl animate-pulse"></div>
           <div className="absolute bottom-20 right-20 w-40 h-40 bg-[#AEEA00] rounded-full blur-3xl animate-pulse delay-1000"></div>
@@ -134,233 +80,287 @@ export default function ProductsPage() {
 
         <div className="max-w-7xl mx-auto px-4 relative z-10">
           <div className="text-center">
-            <Badge className="bg-[#FFD700] text-[#1A1A1A] px-6 py-2 text-sm font-bold mb-4">PRODUCT SHOWCASE</Badge>
+            <Badge className="bg-[#FFD700] text-[#1A1A1A] px-6 py-2 text-sm font-bold mb-4">
+              PREMIUM SPORTS STORE
+            </Badge>
             <h1 className="text-4xl md:text-6xl font-black mb-6">
-              PREMIUM
-              <span className="block text-[#FF3D00]">SPORTS BRANDS</span>
+              PROFESSIONAL
+              <span className="block text-[#FF3D00]">SPORTS EQUIPMENT</span>
             </h1>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
-              Discover our extensive collection of world-renowned sports equipment from the most trusted brands in the
-              industry. From professional athletes to weekend warriors, we have everything you need.
+              Discover hundreds of premium sports products from world-renowned
+              brands. From professional athletes to weekend warriors, find
+              everything you need to excel.
             </p>
 
-            {/* Search Bar */}
-            <div className="max-w-md mx-auto relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <Input
-                type="text"
-                placeholder="Search brands or sports..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-3 bg-white/10 border-white/20 text-white placeholder-gray-300 rounded-full"
-              />
+            {/* Stats */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+              {[
+                { icon: Package, label: "Products", value: "500+" },
+                { icon: Star, label: "Brands", value: "25+" },
+                { icon: TrendingUp, label: "Categories", value: "12+" },
+                { icon: Zap, label: "Featured Items", value: "50+" },
+              ].map((stat) => (
+                <div key={stat.label} className="text-center">
+                  <stat.icon className="w-8 h-8 mx-auto mb-2 text-[#FFD700]" />
+                  <div className="text-2xl font-black">{stat.value}</div>
+                  <div className="text-sm text-gray-300">{stat.label}</div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Featured Brands Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <Badge className="bg-[#FF3D00] text-white px-6 py-2 text-sm font-bold mb-4">FEATURED PARTNERSHIPS</Badge>
-            <h2 className="text-4xl md:text-5xl font-black text-[#1A1A1A] mb-6">
-              EXCLUSIVE
-              <span className="block text-[#003DA5]">BRAND PARTNERS</span>
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Our flagship partnerships with world-leading sports brands, bringing you authentic, professional-grade
-              equipment.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {featuredBrands.map((brand, index) => {
-              const IconComponent = brand.icon
-              return (
-                <Card
-                  key={brand.name}
-                  className="group hover:shadow-2xl transition-all duration-500 border-0 overflow-hidden"
-                >
-                  <CardContent className="p-0">
-                    {/* Brand Header */}
-                    <div className={`bg-gradient-to-br ${brand.color} p-6 text-white relative overflow-hidden`}>
-                      <div className="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-full -translate-y-10 translate-x-10"></div>
-                      <div className="relative z-10">
-                        <IconComponent className="w-8 h-8 mb-4" />
-                        <h3 className="text-2xl font-black mb-2">{brand.name}</h3>
-                        <p className="text-sm opacity-90">{brand.heritage}</p>
-                      </div>
-                    </div>
-
-                    {/* Brand Content */}
-                    <div className="p-6">
-                      <Badge className="bg-[#FFD700] text-[#1A1A1A] mb-3 font-bold">{brand.category}</Badge>
-                      <p className="text-gray-600 mb-4 leading-relaxed">{brand.description}</p>
-
-                      {/* Product Categories */}
-                      <div className="space-y-2 mb-6">
-                        {brand.products.slice(0, 3).map((product) => (
-                          <div key={product} className="flex items-center gap-2">
-                            <div className="w-2 h-2 bg-[#AEEA00] rounded-full"></div>
-                            <span className="text-sm text-gray-700 font-medium">{product}</span>
-                          </div>
-                        ))}
-                        {brand.products.length > 3 && (
-                          <div className="flex items-center gap-2">
-                            <div className="w-2 h-2 bg-[#AEEA00] rounded-full"></div>
-                            <span className="text-sm text-gray-500">+{brand.products.length - 3} more</span>
-                          </div>
-                        )}
-                      </div>
-
-                      <Button
-                        variant="outline"
-                        className="w-full border-2 border-[#003DA5] text-[#003DA5] hover:bg-[#003DA5] hover:text-white font-bold transition-all duration-300"
-                      >
-                        <Eye className="w-4 h-4 mr-2" />
-                        VIEW PRODUCTS
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              )
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Category Filter & All Brands */}
-      <section className="py-20 bg-gray-50">
+      {/* Featured Products Section */}
+      <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
-            <Badge className="bg-[#AEEA00] text-[#1A1A1A] px-6 py-2 text-sm font-bold mb-4">ALL BRANDS</Badge>
-            <h2 className="text-4xl md:text-5xl font-black text-[#1A1A1A] mb-6">
-              COMPLETE
-              <span className="block text-[#FF3D00]">PRODUCT RANGE</span>
+            <Badge className="bg-[#FF3D00] text-white px-6 py-2 text-sm font-bold mb-4">
+              FEATURED COLLECTION
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-black text-[#1A1A1A] mb-4">
+              TRENDING
+              <span className="block text-[#003DA5]">PRODUCTS</span>
             </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Handpicked selection of our most popular and highest-rated sports
+              equipment
+            </p>
           </div>
 
-          {/* Category Filter */}
-          <div className="flex flex-wrap justify-center gap-3 mb-12">
-            {categories.map((category) => (
-              <Button
-                key={category}
-                variant={selectedCategory === category ? "default" : "outline"}
-                onClick={() => setSelectedCategory(category)}
-                className={`rounded-full px-6 py-2 font-bold transition-all duration-300 ${
-                  selectedCategory === category
-                    ? "bg-[#003DA5] text-white hover:bg-[#003DA5]/90"
-                    : "border-2 border-[#003DA5] text-[#003DA5] hover:bg-[#003DA5] hover:text-white"
-                }`}
-              >
-                {category}
-              </Button>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            {featuredProducts.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                showBrand={true}
+                showCategory={false}
+              />
             ))}
           </div>
 
-          {/* All Brands Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredBrands.map((brand, index) => {
-              const IconComponent = brand.icon
-              return (
-                <Card
-                  key={brand.name}
-                  className="group hover:shadow-xl transition-all duration-300 border-0 overflow-hidden bg-white"
-                >
-                  <CardContent className="p-0">
-                    {/* Brand Image */}
-                    <div className="relative overflow-hidden h-48">
-                      <img
-                        src={brand.image || "/placeholder.svg"}
-                        alt={brand.name}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                      />
-                      <div className={`absolute inset-0 bg-gradient-to-t ${brand.color} opacity-80`}></div>
-
-                      {brand.featured && (
-                        <Badge className="absolute top-4 left-4 bg-[#FFD700] text-[#1A1A1A] font-bold">FEATURED</Badge>
-                      )}
-
-                      <div className="absolute bottom-4 left-4 right-4">
-                        <div className="flex items-center gap-2 mb-2">
-                          <IconComponent className="w-6 h-6 text-white" />
-                          <span className="text-white text-sm font-bold">{brand.heritage}</span>
-                        </div>
-                        <h3 className="text-2xl font-black text-white">{brand.name}</h3>
-                      </div>
-                    </div>
-
-                    {/* Brand Info */}
-                    <div className="p-4">
-                      <Badge className="bg-gray-100 text-gray-700 mb-2 text-xs">{brand.category}</Badge>
-                      <p className="text-gray-600 text-sm mb-4">{brand.description}</p>
-
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="w-full border-[#003DA5] text-[#003DA5] hover:bg-[#003DA5] hover:text-white font-bold"
-                      >
-                        VIEW DETAILS
-                        <ArrowRight className="w-4 h-4 ml-2" />
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              )
-            })}
+          <div className="text-center">
+            <Button
+              size="lg"
+              onClick={() =>
+                window.scrollTo({
+                  top: document.getElementById("all-products")?.offsetTop || 0,
+                  behavior: "smooth",
+                })
+              }
+              className="bg-[#003DA5] hover:bg-[#003DA5]/90 text-white px-8"
+            >
+              <ShoppingBag className="w-5 h-5 mr-2" />
+              Browse All Products
+            </Button>
           </div>
-
-          {filteredBrands.length === 0 && (
-            <div className="text-center py-12">
-              <p className="text-gray-500 text-lg">No brands found matching your criteria.</p>
-              <Button
-                onClick={() => {
-                  setSelectedCategory("All Categories")
-                  setSearchTerm("")
-                }}
-                className="mt-4 bg-[#003DA5] hover:bg-[#003DA5]/90 text-white"
-              >
-                Clear Filters
-              </Button>
-            </div>
-          )}
         </div>
       </section>
 
-      {/* Product Categories Overview */}
-      <section className="py-20 bg-[#1A1A1A] text-white">
+      {/* All Products Section */}
+      <section id="all-products" className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <Badge className="bg-[#FFD700] text-[#1A1A1A] px-6 py-2 text-sm font-bold mb-4">PRODUCT CATEGORIES</Badge>
-            <h2 className="text-4xl md:text-5xl font-black mb-6">
-              EQUIPMENT FOR
-              <span className="block text-[#AEEA00]">EVERY SPORT</span>
+          <div className="text-center mb-12">
+            <Badge className="bg-[#AEEA00] text-[#1A1A1A] px-6 py-2 text-sm font-bold mb-4">
+              COMPLETE CATALOG
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-black text-[#1A1A1A] mb-4">
+              ALL
+              <span className="block text-[#FF3D00]">PRODUCTS</span>
             </h2>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              { sport: "Cricket", items: "Bats, Balls, Protective Gear, Accessories", color: "bg-[#003DA5]" },
-              { sport: "Rugby", items: "Balls, Training Equipment, Protective Gear", color: "bg-[#FF3D00]" },
-              { sport: "Basketball", items: "Basketballs, Hoops, Training Equipment", color: "bg-[#FFD700]" },
-              { sport: "Volleyball", items: "Volleyballs, Nets, Court Equipment", color: "bg-[#AEEA00]" },
-              { sport: "Hockey", items: "Sticks, Balls, Protective Equipment", color: "bg-[#FF3D00]" },
-              { sport: "Tennis", items: "Rackets, Balls, Court Accessories", color: "bg-[#003DA5]" },
-            ].map((category, index) => (
-              <Card
-                key={category.sport}
-                className="bg-white/5 border-white/10 hover:bg-white/10 transition-all duration-300"
-              >
-                <CardContent className="p-6">
-                  <div className={`w-12 h-12 ${category.color} rounded-lg flex items-center justify-center mb-4`}>
-                    <Trophy className="w-6 h-6 text-white" />
+          <div className="flex flex-col lg:flex-row gap-8">
+            {/* Filters Sidebar */}
+            <div className="lg:w-80 flex-shrink-0">
+              <div className="sticky top-24">
+                <FiltersComponent
+                  filters={filters}
+                  sort={sort}
+                  onFiltersChange={handleFiltersChange}
+                  onSortChange={handleSortChange}
+                  onReset={handleResetFilters}
+                  isOpen={showFilters || window.innerWidth >= 1024}
+                  onToggle={() => setShowFilters(!showFilters)}
+                />
+              </div>
+            </div>
+
+            {/* Products Grid */}
+            <div className="flex-1">
+              {/* Toolbar */}
+              <Card className="mb-6">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between flex-wrap gap-4">
+                    <div className="flex items-center gap-4">
+                      {productsData && (
+                        <p className="text-sm text-gray-600">
+                          Showing {(currentPage - 1) * 12 + 1}-
+                          {Math.min(
+                            currentPage * 12,
+                            productsData.pagination.totalItems,
+                          )}{" "}
+                          of {productsData.pagination.totalItems} products
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant={viewMode === "grid" ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setViewMode("grid")}
+                        className={
+                          viewMode === "grid" ? "bg-[#003DA5] text-white" : ""
+                        }
+                      >
+                        <Grid3X3 className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        variant={viewMode === "list" ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setViewMode("list")}
+                        className={
+                          viewMode === "list" ? "bg-[#003DA5] text-white" : ""
+                        }
+                      >
+                        <List className="w-4 h-4" />
+                      </Button>
+
+                      <Separator orientation="vertical" className="h-8 mx-2" />
+
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setShowFilters(!showFilters)}
+                        className="lg:hidden"
+                      >
+                        <Filter className="w-4 h-4 mr-2" />
+                        Filters
+                      </Button>
+                    </div>
                   </div>
-                  <h3 className="text-xl font-bold mb-2">{category.sport}</h3>
-                  <p className="text-gray-300 text-sm">{category.items}</p>
                 </CardContent>
               </Card>
-            ))}
+
+              {/* Products */}
+              {loading ? (
+                <div
+                  className={`grid gap-6 ${
+                    viewMode === "grid"
+                      ? "md:grid-cols-2 lg:grid-cols-3"
+                      : "grid-cols-1"
+                  }`}
+                >
+                  {Array.from({ length: 12 }).map((_, i) => (
+                    <Card key={i} className="overflow-hidden">
+                      <CardContent className="p-0">
+                        <Skeleton className="h-64 w-full" />
+                        <div className="p-4 space-y-3">
+                          <Skeleton className="h-4 w-3/4" />
+                          <Skeleton className="h-6 w-1/2" />
+                          <Skeleton className="h-4 w-full" />
+                          <Skeleton className="h-4 w-full" />
+                          <div className="flex gap-2">
+                            <Skeleton className="h-8 flex-1" />
+                            <Skeleton className="h-8 w-20" />
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              ) : productsData && productsData.products.length > 0 ? (
+                <>
+                  <div
+                    className={`grid gap-6 ${
+                      viewMode === "grid"
+                        ? "md:grid-cols-2 lg:grid-cols-3"
+                        : "grid-cols-1"
+                    }`}
+                  >
+                    {productsData.products.map((product) => (
+                      <ProductCard
+                        key={product.id}
+                        product={product}
+                        variant={viewMode}
+                        showBrand={true}
+                        showCategory={true}
+                      />
+                    ))}
+                  </div>
+
+                  {/* Pagination */}
+                  {productsData.pagination.totalPages > 1 && (
+                    <div className="mt-12 flex justify-center">
+                      <div className="flex items-center gap-2">
+                        <Button
+                          variant="outline"
+                          onClick={() => handlePageChange(currentPage - 1)}
+                          disabled={!productsData.pagination.hasPrevPage}
+                        >
+                          Previous
+                        </Button>
+
+                        {Array.from({
+                          length: Math.min(
+                            5,
+                            productsData.pagination.totalPages,
+                          ),
+                        }).map((_, i) => {
+                          const page = i + Math.max(1, currentPage - 2);
+                          if (page > productsData.pagination.totalPages)
+                            return null;
+
+                          return (
+                            <Button
+                              key={page}
+                              variant={
+                                page === currentPage ? "default" : "outline"
+                              }
+                              onClick={() => handlePageChange(page)}
+                              className={
+                                page === currentPage
+                                  ? "bg-[#003DA5] text-white"
+                                  : ""
+                              }
+                            >
+                              {page}
+                            </Button>
+                          );
+                        })}
+
+                        <Button
+                          variant="outline"
+                          onClick={() => handlePageChange(currentPage + 1)}
+                          disabled={!productsData.pagination.hasNextPage}
+                        >
+                          Next
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <Card className="p-12 text-center">
+                  <Package className="w-16 h-16 mx-auto text-gray-400 mb-4" />
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">
+                    No Products Found
+                  </h3>
+                  <p className="text-gray-600 mb-6">
+                    Try adjusting your filters or search terms to find what
+                    you're looking for.
+                  </p>
+                  <Button
+                    onClick={handleResetFilters}
+                    className="bg-[#003DA5] hover:bg-[#003DA5]/90 text-white"
+                  >
+                    Clear All Filters
+                  </Button>
+                </Card>
+              )}
+            </div>
           </div>
         </div>
       </section>
@@ -368,35 +368,39 @@ export default function ProductsPage() {
       {/* CTA Section */}
       <section className="py-16 bg-gradient-to-r from-[#003DA5] to-[#FF3D00] text-white">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-black mb-4">READY TO ORDER?</h2>
+          <h2 className="text-3xl md:text-4xl font-black mb-4">
+            NEED HELP FINDING THE RIGHT GEAR?
+          </h2>
           <p className="text-xl mb-8 opacity-90">
-            Contact our team for bulk orders, custom requirements, or product consultations
+            Our sports equipment experts are here to help you find the perfect
+            products for your needs.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
               size="lg"
               className="bg-white text-[#003DA5] hover:bg-gray-100 px-8 py-4 text-lg font-bold rounded-full"
             >
-              GET QUOTE NOW
+              Contact Our Experts
             </Button>
             <Button
               size="lg"
               variant="outline"
               className="border-2 border-white text-white hover:bg-white hover:text-[#003DA5] px-8 py-4 text-lg font-bold rounded-full bg-transparent"
             >
-              CONTACT SALES TEAM
+              Request Bulk Quote
             </Button>
           </div>
 
-          {/* E-commerce Teaser */}
+          {/* PayloadCMS Integration Note */}
           <div className="mt-12 bg-white/10 rounded-2xl p-6 backdrop-blur-sm">
-            <h3 className="text-xl font-bold mb-2">🚀 E-COMMERCE PLATFORM COMING SOON!</h3>
+            <h3 className="text-xl font-bold mb-2">🚀 POWERED BY MODERN CMS</h3>
             <p className="text-sm opacity-90">
-              Shop online for all your favorite sports equipment. Be the first to know when we launch!
+              This store is designed to integrate seamlessly with PayloadCMS for
+              easy content management and product updates.
             </p>
           </div>
         </div>
       </section>
     </main>
-  )
+  );
 }
