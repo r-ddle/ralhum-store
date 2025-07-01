@@ -2,17 +2,6 @@ import type React from "react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Navigation from "@/components/navigation";
-import Footer from "@/components/footer";
-import FloatingWhatsApp from "@/components/floating-whatsapp";
-import AccessibilityEnhancements from "@/components/accessibility-enhancements";
-import { ThemeProvider } from "@/components/theme-provider";
-import { CartProvider } from "@/hooks/use-cart";
-import { CartSidebar } from "@/components/cart/cart-sidebar";
-import { Toaster } from "@/components/ui/sonner";
-import PerformanceOptimizer from "@/components/performance-optimizer";
-import SiteHealthChecker from "@/components/site-health-checker";
-import LaunchChecklist from "@/components/launch-checklist";
 
 const inter = Inter({ subsets: ["latin"] });
 
