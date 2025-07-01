@@ -18,6 +18,7 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Toaster } from "react-hot-toast";
+import QueryProvider from "@/components/providers/query-provider";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -235,7 +236,9 @@ function SidebarContent({
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
     <SessionProvider>
-      <DashboardContent>{children}</DashboardContent>
+      <QueryProvider>
+        <DashboardContent>{children}</DashboardContent>
+      </QueryProvider>
     </SessionProvider>
   );
 }
