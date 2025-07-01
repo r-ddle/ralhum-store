@@ -1,18 +1,26 @@
+import Hero from "@/components/hero";
+import SportsCategories from "@/components/sports-categories";
+import BrandPartners from "@/components/brand-partners";
+import Heritage from "@/components/heritage";
+import ContactCTA from "@/components/contact-cta";
+
 export default function Home() {
   return (
-    <div className="min-h-screen bg-white p-8">
-      <h1 className="text-4xl font-bold text-gray-900">Ralhum Sports</h1>
-      <p className="mt-4 text-lg text-gray-600">
-        Welcome to Ralhum Sports - Your Premier Sports Equipment Store
-      </p>
-      <div className="mt-8">
-        <a
-          href="/admin"
-          className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
-        >
-          Go to Admin Dashboard
-        </a>
-      </div>
+    <div className="min-h-screen">
+      {/* Hero Section */}
+      <Hero />
+
+      {/* Sports Categories */}
+      <SportsCategories />
+
+      {/* Brand Partners */}
+      <BrandPartners />
+
+      {/* Heritage Section */}
+      <Heritage />
+
+      {/* Contact CTA */}
+      <ContactCTA />
     </div>
   );
 }
