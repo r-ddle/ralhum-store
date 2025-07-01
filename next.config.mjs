@@ -12,7 +12,7 @@ const nextConfig = {
   },
 
   experimental: {
-    reactCompiler: false,
+    // Empty for Next.js 14
   },
 
   async headers() {
