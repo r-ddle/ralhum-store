@@ -5,10 +5,9 @@ import { useCart } from "@/hooks/use-cart";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Star, ShoppingCart, Eye, Heart } from "lucide-react";
+import { Star, ShoppingCart, Eye } from "lucide-react";
 import { formatPrice, getProductPrice } from "@/lib/products";
 import Link from "next/link";
-import { useState } from "react";
 
 interface ProductCardProps {
   product: Product;
@@ -23,7 +22,6 @@ export function ProductCard({
   showBrand = true,
   showCategory = true,
 }: ProductCardProps) {
-  const [isWishlisted, setIsWishlisted] = useState(false);
   const { addItem } = useCart();
   const price = getProductPrice(product);
   const primaryImage = product.images[0];
@@ -66,20 +64,6 @@ export function ProductCard({
                   </Badge>
                 )}
               </div>
-
-              {/* Wishlist Button */}
-              <Button
-                size="sm"
-                variant="ghost"
-                className="absolute top-3 right-3 w-8 h-8 p-0 bg-white/90 hover:bg-white"
-                onClick={() => setIsWishlisted(!isWishlisted)}
-              >
-                <Heart
-                  className={`w-4 h-4 ${
-                    isWishlisted ? "fill-red-500 text-red-500" : "text-gray-600"
-                  }`}
-                />
-              </Button>
             </div>
 
             {/* Content Section */}
@@ -221,20 +205,6 @@ export function ProductCard({
               </Badge>
             )}
           </div>
-
-          {/* Wishlist Button */}
-          <Button
-            size="sm"
-            variant="ghost"
-            className="absolute top-3 right-3 w-8 h-8 p-0 bg-white/90 hover:bg-white"
-            onClick={() => setIsWishlisted(!isWishlisted)}
-          >
-            <Heart
-              className={`w-4 h-4 ${
-                isWishlisted ? "fill-red-500 text-red-500" : "text-gray-600"
-              }`}
-            />
-          </Button>
 
           {/* Quick Actions Overlay */}
           <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-2">
