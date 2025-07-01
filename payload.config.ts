@@ -1,6 +1,5 @@
 import { buildConfig } from "payload";
 import { webpackBundler } from "@payloadcms/bundler-webpack";
-import { postgresAdapter } from "@payloadcms/db-postgres";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import path from "path";
 
@@ -32,13 +31,6 @@ export default buildConfig({
   },
 
   collections: [Users],
-
-  db: postgresAdapter({
-    pool: {
-      connectionString:
-        process.env.DATABASE_URL || "postgresql://localhost:5432/ralhum_sports",
-    },
-  }),
 
   editor: lexicalEditor({}),
 
