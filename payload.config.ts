@@ -1,4 +1,4 @@
-import { buildConfig } from "payload/config";
+import { buildConfig } from "payload";
 import { webpackBundler } from "@payloadcms/bundler-webpack";
 import { postgresAdapter } from "@payloadcms/db-postgres";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
