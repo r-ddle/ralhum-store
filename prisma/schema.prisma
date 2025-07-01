@@ -56,7 +56,7 @@ model Product {
   easyReturn          Boolean @default(false)
 
   // Additional fields
-  images       String[] // Array of image URLs
+  images       String? // JSON string of image URLs
   skuCode      String   @unique
   stockQuantity Int      @default(0)
   status       ProductStatus @default(ACTIVE)
