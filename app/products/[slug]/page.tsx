@@ -27,7 +27,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, useRouter } from "next/navigation";
 
 interface ProductDetailPageProps {
   params: {
@@ -412,8 +412,13 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
                   variant="outline"
                   size="lg"
                   className="w-full font-bold border-2 border-[#003DA5] text-[#003DA5] hover:bg-[#003DA5] hover:text-white"
+                  onClick={() => {
+                    handleAddToCart();
+                    router.push("/checkout");
+                  }}
+                  disabled={isOutOfStock}
                 >
-                  Buy Now
+                  {isOutOfStock ? "Out of Stock" : "Buy Now"}
                 </Button>
               </div>
 
