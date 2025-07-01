@@ -1,6 +1,6 @@
 import sharp from "sharp";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
-import { postgresAdapter } from "@payloadcms/db-postgres";
+import { sqliteAdapter } from "@payloadcms/db-sqlite";
 import { buildConfig } from "payload";
 import { seoPlugin } from "@payloadcms/plugin-seo";
 import path from "path";
@@ -38,12 +38,9 @@ export default buildConfig({
     Media,
   ],
 
-  db: postgresAdapter({
-    pool: {
-      connectionString:
-        process.env.DATABASE_URL ||
-        process.env.POSTGRES_URL ||
-        "postgresql://localhost:5432/ralhum_sports",
+  db: sqliteAdapter({
+    client: {
+      url: path.resolve(__dirname, "ralhum_sports.db"),
     },
   }),
 
