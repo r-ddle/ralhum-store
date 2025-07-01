@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 
 export default function AccessibilityEnhancements() {
   const [isReducedMotion, setIsReducedMotion] = useState(false);
-  const [fontSize, setFontSize] = useState(16);
   const [highContrast, setHighContrast] = useState(false);
 
   useEffect(() => {
@@ -309,41 +308,5 @@ export default function AccessibilityEnhancements() {
     };
   }, []);
 
-  // Create a floating accessibility toolbar (optional)
-  const AccessibilityToolbar = () => (
-    <div
-      className="fixed bottom-4 right-4 z-50 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-4 hidden lg:block"
-      role="region"
-      aria-label="Accessibility Tools"
-    >
-      <h3 className="text-sm font-bold mb-2">Accessibility</h3>
-      <div className="space-y-2">
-        <button
-          onClick={() => setFontSize((prev) => Math.min(prev + 2, 24))}
-          className="block w-full text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700 p-1 rounded"
-          aria-label="Increase font size"
-        >
-          A+ Larger Text
-        </button>
-        <button
-          onClick={() => setFontSize((prev) => Math.max(prev - 2, 12))}
-          className="block w-full text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700 p-1 rounded"
-          aria-label="Decrease font size"
-        >
-          A- Smaller Text
-        </button>
-        <button
-          onClick={() => setHighContrast((prev) => !prev)}
-          className="block w-full text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700 p-1 rounded"
-          aria-label={
-            highContrast ? "Disable high contrast" : "Enable high contrast"
-          }
-        >
-          🎨 High Contrast
-        </button>
-      </div>
-    </div>
-  );
-
-  return <AccessibilityToolbar />;
+  return null;
 }

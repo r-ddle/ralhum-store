@@ -12,7 +12,8 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { CartItem } from "./cart-item";
-import { formatPrice } from "@/lib/products";
+import { CheckoutButton } from "./checkout-button";
+import { formatLKR } from "@/lib/currency";
 import {
   ShoppingBag,
   Truck,
@@ -66,7 +67,7 @@ export function CartSidebar() {
                 <div className="flex items-center gap-2 mb-2">
                   <Truck className="w-4 h-4 text-[#003DA5]" />
                   <span className="text-sm font-medium text-gray-900">
-                    Add {formatPrice(summary.freeShippingRemaining)} for FREE
+                    Add {formatLKR(summary.freeShippingRemaining)} for FREE
                     shipping!
                   </span>
                 </div>
@@ -74,7 +75,7 @@ export function CartSidebar() {
                   <div
                     className="bg-gradient-to-r from-[#AEEA00] to-[#FFD700] h-2 rounded-full transition-all duration-300"
                     style={{
-                      width: `${Math.min(100, (summary.subtotal / FREE_SHIPPING_THRESHOLD) * 100)}%`,
+                      width: `${Math.min(100, (summary.subtotal / FREE_SHIPPING_THRESHOLD_LKR) * 100)}%`,
                     }}
                   />
                 </div>
@@ -107,7 +108,7 @@ export function CartSidebar() {
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Subtotal</span>
                   <span className="font-medium">
-                    {formatPrice(summary.subtotal)}
+                    {formatLKR(summary.subtotal)}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
@@ -121,20 +122,18 @@ export function CartSidebar() {
                         FREE
                       </Badge>
                     ) : (
-                      formatPrice(summary.shipping)
+                      formatLKR(summary.shipping)
                     )}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Tax</span>
-                  <span className="font-medium">
-                    {formatPrice(summary.tax)}
-                  </span>
+                  <span className="text-gray-600">Tax (15%)</span>
+                  <span className="font-medium">{formatLKR(summary.tax)}</span>
                 </div>
                 <Separator />
                 <div className="flex justify-between text-lg font-bold">
                   <span>Total</span>
-                  <span>{formatPrice(summary.total)}</span>
+                  <span>{formatLKR(summary.total)}</span>
                 </div>
               </div>
 
@@ -146,14 +145,7 @@ export function CartSidebar() {
               </div>
 
               {/* Checkout Button */}
-              <Button
-                size="lg"
-                className="w-full bg-[#FF3D00] hover:bg-[#FF3D00]/90 text-white font-bold py-4"
-                onClick={closeCart}
-              >
-                <CreditCard className="w-5 h-5 mr-2" />
-                Proceed to Checkout
-              </Button>
+              <CheckoutButton />
 
               {/* Continue Shopping */}
               <Button
@@ -190,4 +182,4 @@ export function CartSidebar() {
   );
 }
 
-const FREE_SHIPPING_THRESHOLD = 75;
+const FREE_SHIPPING_THRESHOLD_LKR = 23625;

@@ -2,12 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { Product, ProductVariant } from "@/types/product";
-import {
-  getProductBySlug,
-  getProductsByBrand,
-  formatPrice,
-  getProductPrice,
-} from "@/lib/products";
+import { getProductBySlug, getProductsByBrand } from "@/lib/products";
+import { formatLKR, convertUsdToLkr, getPriceDisplay } from "@/lib/currency";
 import { useCart } from "@/hooks/use-cart";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -17,7 +13,6 @@ import { Separator } from "@/components/ui/separator";
 import { ProductCard } from "@/components/product-card";
 import {
   ShoppingCart,
-  Heart,
   Share2,
   Star,
   Check,
@@ -32,7 +27,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, useRouter } from "next/navigation";
 
 interface ProductDetailPageProps {
   params: {
@@ -41,13 +36,13 @@ interface ProductDetailPageProps {
 }
 
 export default function ProductDetailPage({ params }: ProductDetailPageProps) {
+  const router = useRouter();
   const [product, setProduct] = useState<Product | null>(null);
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(
     null,
   );
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
-  const [isWishlisted, setIsWishlisted] = useState(false);
   const [loading, setLoading] = useState(true);
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
 
@@ -123,25 +118,28 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
       <section className="py-4 bg-gray-50 dark:bg-gray-900 border-b">
         <div className="max-w-7xl mx-auto px-4">
           <nav className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
-            <Link href="/" className="hover:text-[#003DA5] transition-colors">
+            <Link
+              href="/"
+              className="hover:text-[#003DA5] transition-colors leading-none"
+            >
               Home
             </Link>
-            <span>/</span>
+            <span className="leading-none">/</span>
             <Link
               href="/products"
-              className="hover:text-[#003DA5] transition-colors"
+              className="hover:text-[#003DA5] transition-colors leading-none"
             >
               Store
             </Link>
-            <span>/</span>
+            <span className="leading-none">/</span>
             <Link
               href={`/products?brands=${product.brand.slug}`}
-              className="hover:text-[#003DA5] transition-colors"
+              className="hover:text-[#003DA5] transition-colors leading-none"
             >
               {product.brand.name}
             </Link>
-            <span>/</span>
-            <span className="text-gray-900 dark:text-white font-medium truncate">
+            <span className="leading-none">/</span>
+            <span className="text-gray-900 dark:text-white font-medium truncate leading-none">
               {product.title}
             </span>
           </nav>
@@ -181,18 +179,8 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
                   )}
                 </div>
 
-                {/* Wishlist & Share */}
-                <div className="absolute top-4 right-4 flex flex-col gap-2">
-                  <Button
-                    size="sm"
-                    variant="secondary"
-                    onClick={() => setIsWishlisted(!isWishlisted)}
-                    className="w-10 h-10 p-0 rounded-full bg-white/90 hover:bg-white"
-                  >
-                    <Heart
-                      className={`w-5 h-5 ${isWishlisted ? "fill-red-500 text-red-500" : "text-gray-600"}`}
-                    />
-                  </Button>
+                {/* Share Button */}
+                <div className="absolute top-4 right-4">
                   <Button
                     size="sm"
                     variant="secondary"
@@ -275,26 +263,30 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
               <div className="space-y-2">
                 <div className="flex items-baseline gap-3">
                   <span className="text-3xl font-black text-gray-900 dark:text-white">
-                    {formatPrice(selectedVariant.price)}
+                    {formatLKR(convertUsdToLkr(selectedVariant.price))}
                   </span>
                   {selectedVariant.compareAtPrice &&
                     selectedVariant.compareAtPrice > selectedVariant.price && (
                       <>
                         <span className="text-xl text-gray-500 line-through">
-                          {formatPrice(selectedVariant.compareAtPrice)}
+                          {formatLKR(
+                            convertUsdToLkr(selectedVariant.compareAtPrice),
+                          )}
                         </span>
                         <Badge className="bg-[#FF3D00] text-white font-bold">
                           SAVE{" "}
-                          {formatPrice(
-                            selectedVariant.compareAtPrice -
-                              selectedVariant.price,
+                          {formatLKR(
+                            convertUsdToLkr(
+                              selectedVariant.compareAtPrice -
+                                selectedVariant.price,
+                            ),
                           )}
                         </Badge>
                       </>
                     )}
                 </div>
                 <p className="text-sm text-gray-600">
-                  Price includes tax. Free shipping on orders over $75.
+                  Price includes tax. Free shipping on orders over LKR 23,625.
                 </p>
               </div>
 
@@ -350,7 +342,7 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
                       >
                         <div className="font-medium">{variant.name}</div>
                         <div className="text-sm text-gray-600">
-                          {formatPrice(variant.price)}
+                          {formatLKR(convertUsdToLkr(variant.price))}
                           {variant.inventory <= 5 && variant.inventory > 0 && (
                             <span className="text-orange-600 ml-2">
                               • Low stock
@@ -420,22 +412,18 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
                   {isOutOfStock ? "Out of Stock" : "Add to Cart"}
                 </Button>
 
-                <div className="grid grid-cols-2 gap-3">
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    onClick={() => setIsWishlisted(!isWishlisted)}
-                    className="font-bold border-2 border-[#003DA5] text-[#003DA5] hover:bg-[#003DA5] hover:text-white"
-                  >
-                    <Heart
-                      className={`w-5 h-5 mr-2 ${isWishlisted ? "fill-current" : ""}`}
-                    />
-                    {isWishlisted ? "Saved" : "Save"}
-                  </Button>
-                  <Button variant="outline" size="lg" className="font-bold">
-                    Buy Now
-                  </Button>
-                </div>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="w-full font-bold border-2 border-[#003DA5] text-[#003DA5] hover:bg-[#003DA5] hover:text-white"
+                  onClick={() => {
+                    handleAddToCart();
+                    router.push("/checkout");
+                  }}
+                  disabled={isOutOfStock}
+                >
+                  {isOutOfStock ? "Out of Stock" : "Buy Now"}
+                </Button>
               </div>
 
               {/* Trust Badges */}

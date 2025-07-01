@@ -123,18 +123,21 @@ export default function NewsDetailPage({ params }: NewsDetailPageProps) {
       <section className="py-4 bg-gray-50 dark:bg-gray-900 border-b">
         <div className="max-w-4xl mx-auto px-4">
           <nav className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
-            <Link href="/" className="hover:text-[#003DA5] transition-colors">
+            <Link
+              href="/"
+              className="hover:text-[#003DA5] transition-colors leading-none"
+            >
               Home
             </Link>
-            <span>/</span>
+            <span className="leading-none">/</span>
             <Link
               href="/news"
-              className="hover:text-[#003DA5] transition-colors"
+              className="hover:text-[#003DA5] transition-colors leading-none"
             >
               News
             </Link>
-            <span>/</span>
-            <span className="text-gray-900 dark:text-white font-medium truncate">
+            <span className="leading-none">/</span>
+            <span className="text-gray-900 dark:text-white font-medium truncate leading-none">
               {article.title}
             </span>
           </nav>

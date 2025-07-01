@@ -10,6 +10,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { CartProvider } from "@/hooks/use-cart";
 import { CartSidebar } from "@/components/cart/cart-sidebar";
 import { Toaster } from "@/components/ui/sonner";
+import PerformanceOptimizer from "@/components/performance-optimizer";
 
 const inter = Inter({ subsets: ["latin"] });
 
