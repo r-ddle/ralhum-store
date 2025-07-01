@@ -16,25 +16,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
-        <ThemeProvider defaultTheme="light" storageKey="ralhum-ui-theme">
-          <CartProvider>
-            <PerformanceOptimizer />
-            <AccessibilityEnhancements />
-            <Navigation />
-            <main id="main-content" role="main">
-              {children}
-            </main>
-            <Footer />
-            <FloatingWhatsApp />
-            <CartSidebar />
-            <Toaster position="top-right" richColors />
-            <SiteHealthChecker />
-            <LaunchChecklist />
-          </CartProvider>
-        </ThemeProvider>
-      </body>
+    <html lang="en">
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }
