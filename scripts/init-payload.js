@@ -1,15 +1,12 @@
-const payload = require("payload");
-require("dotenv").config();
+import { getPayload } from "payload";
+import config from "../payload.config.js";
 
 const init = async () => {
   console.log("🚀 Initializing PayloadCMS...");
 
   try {
-    await payload.init({
-      secret: process.env.PAYLOAD_SECRET,
-      mongoURL: false, // We're using PostgreSQL
-      express: false, // We're using Next.js
-      local: true,
+    const payload = await getPayload({
+      config,
     });
 
     console.log("✅ PayloadCMS initialized successfully!");
@@ -136,20 +133,6 @@ const init = async () => {
         brandDescription: "Field sports excellence trusted by Olympic athletes",
         heritage: "Field Sports Excellence",
         featured: true,
-      },
-      {
-        brandName: "Dunlop",
-        brandDescription:
-          "Premium racquet sports equipment with global recognition",
-        heritage: "Global Recognition",
-        featured: false,
-      },
-      {
-        brandName: "Slazenger",
-        brandDescription:
-          "Official Wimbledon ball supplier with multi-sport heritage",
-        heritage: "Wimbledon Heritage",
-        featured: false,
       },
     ];
 
