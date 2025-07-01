@@ -1,0 +1,234 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User authentication and roles
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  password  String
+  role      UserRole @default(PRODUCT_MANAGER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  newsArticles News[]
+
+  @@map("users")
+}
+
+enum UserRole {
+  ADMIN
+  PRODUCT_MANAGER
+}
+
+// Product management
+model Product {
+  id          String @id @default(cuid())
+  productName String
+  slug        String @unique
+
+  // Core product info
+  productCategory String
+  productBrand    String
+  productPrice    Float
+  productSizes    String? // Optional text input
+  productColors   String? // Optional text input
+  description     String?
+
+  // Specifications group
+  material String?
+  weight   String?
+  sizes    String?
+
+  // Shipping options
+  freeShipping        Boolean @default(false)
+  islandWideDelivery  Boolean @default(false)
+  easyReturn          Boolean @default(false)
+
+  // Additional fields
+  images       String[] // Array of image URLs
+  skuCode      String   @unique
+  stockQuantity Int      @default(0)
+  status       ProductStatus @default(ACTIVE)
+
+  // SEO fields
+  seoTitle       String?
+  seoDescription String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId String
+  brand      Brand    @relation(fields: [brandId], references: [id])
+  brandId    String
+  orderItems OrderItem[]
+
+  @@map("products")
+}
+
+enum ProductStatus {
+  ACTIVE
+  INACTIVE
+  DRAFT
+  OUT_OF_STOCK
+}
+
+// Categories management
+model Category {
+  id                  String  @id @default(cuid())
+  categoryName        String  @unique
+  slug                String  @unique
+  categoryDescription String?
+  categoryImage       String?
+  status              Status  @default(ACTIVE)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  products Product[]
+
+  @@map("categories")
+}
+
+// Brands management
+model Brand {
+  id               String  @id @default(cuid())
+  brandName        String  @unique
+  slug             String  @unique
+  brandDescription String?
+  brandLogo        String?
+  brandWebsite     String?
+  status           Status  @default(ACTIVE)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  products Product[]
+
+  @@map("brands")
+}
+
+enum Status {
+  ACTIVE
+  INACTIVE
+}
+
+// News/Blog management
+model News {
+  id           String      @id @default(cuid())
+  postTitle    String
+  slug         String      @unique
+  postContent  String
+  postExcerpt  String?
+  featuredImage String?
+  publishDate  DateTime    @default(now())
+  status       NewsStatus  @default(DRAFT)
+
+  // SEO fields
+  seoTitle       String?
+  seoDescription String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  author   User   @relation(fields: [authorId], references: [id])
+  authorId String
+
+  @@map("news")
+}
+
+enum NewsStatus {
+  PUBLISHED
+  DRAFT
+  ARCHIVED
+}
+
+// Order management
+model Order {
+  id                 String      @id @default(cuid())
+  customerName       String
+  customerEmail      String
+  customerPhone      String
+  deliveryAddress    String
+  specialInstructions String?
+  orderTotal         Float
+  orderStatus        OrderStatus @default(PENDING)
+  whatsappSent       Boolean     @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  orderItems OrderItem[]
+
+  @@map("orders")
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+// Order items
+model OrderItem {
+  id        String @id @default(cuid())
+  quantity  Int
+  unitPrice Float
+  totalPrice Float
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId   String
+  product   Product @relation(fields: [productId], references: [id])
+  productId String
+
+  @@map("order_items")
+}
+
+// Company information (single record)
+model CompanyInfo {
+  id          String @id @default(cuid())
+  companyName String
+  description String?
+  address     String?
+  phone       String?
+  email       String?
+  website     String?
+  
+  // Social media
+  facebook    String?
+  instagram   String?
+  twitter     String?
+  
+  // Business info
+  founded     String?
+  employees   String?
+  heritage    String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("company_info")
+}
