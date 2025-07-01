@@ -10,6 +10,11 @@ import {
 import { Cart, CartItem, CartState, CartActions } from "@/types/cart";
 import { Product, ProductVariant } from "@/types/product";
 import { toast } from "sonner";
+import {
+  convertUsdToLkr,
+  calculateTax,
+  calculateShipping,
+} from "@/lib/currency";
 
 type CartAction =
   | {
@@ -25,9 +30,9 @@ type CartAction =
   | { type: "LOAD_CART"; payload: Cart }
   | { type: "SET_LOADING"; payload: boolean };
 
-const TAX_RATE = 0.08; // 8% tax rate
-const FREE_SHIPPING_THRESHOLD = 75;
-const STANDARD_SHIPPING = 9.99;
+const EXCHANGE_RATE = 315; // USD to LKR
+const FREE_SHIPPING_THRESHOLD_LKR = 23625; // LKR 23,625 (equivalent to USD 75)
+const STANDARD_SHIPPING_LKR = 3150; // LKR 3,150 (equivalent to USD 10)
 
 function calculateCartTotals(items: CartItem[]): {
   subtotal: number;
@@ -36,16 +41,25 @@ function calculateCartTotals(items: CartItem[]): {
   total: number;
   itemCount: number;
 } {
-  const subtotal = items.reduce(
+  // Calculate in USD first, then convert to LKR
+  const subtotalUSD = items.reduce(
     (sum, item) => sum + item.variant.price * item.quantity,
     0,
   );
-  const tax = subtotal * TAX_RATE;
-  const shipping = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : STANDARD_SHIPPING;
-  const total = subtotal + tax + shipping;
+  const subtotalLKR = convertUsdToLkr(subtotalUSD, EXCHANGE_RATE);
+
+  const shipping = calculateShipping(subtotalLKR, FREE_SHIPPING_THRESHOLD_LKR);
+  const tax = calculateTax(subtotalLKR + shipping);
+  const total = subtotalLKR + shipping + tax;
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
-  return { subtotal, tax, shipping, total, itemCount };
+  return {
+    subtotal: subtotalLKR,
+    tax,
+    shipping,
+    total,
+    itemCount,
+  };
 }
 
 function createEmptyCart(): Cart {
@@ -313,7 +327,10 @@ export function useCartSummary() {
     shipping: cart.shipping,
     total: cart.total,
     itemCount: cart.itemCount,
-    freeShippingEligible: cart.subtotal >= FREE_SHIPPING_THRESHOLD,
-    freeShippingRemaining: Math.max(0, FREE_SHIPPING_THRESHOLD - cart.subtotal),
+    freeShippingEligible: cart.subtotal >= FREE_SHIPPING_THRESHOLD_LKR,
+    freeShippingRemaining: Math.max(
+      0,
+      FREE_SHIPPING_THRESHOLD_LKR - cart.subtotal,
+    ),
   };
 }
