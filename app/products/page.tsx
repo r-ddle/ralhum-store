@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useWindowSize } from "@/hooks/use-window-size";
 import { ProductsResponse, ProductFilters, ProductSort } from "@/types/product";
 import { getProducts, getFeaturedProducts } from "@/lib/products";
 import { ProductCard } from "@/components/product-card";
@@ -66,7 +67,9 @@ export default function StorePage() {
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
 
   return (
@@ -143,12 +146,14 @@ export default function StorePage() {
           <div className="text-center">
             <Button
               size="lg"
-              onClick={() =>
-                window.scrollTo({
-                  top: document.getElementById("all-products")?.offsetTop || 0,
-                  behavior: "smooth",
-                })
-              }
+              onClick={() => {
+                if (typeof window !== 'undefined') {
+                  window.scrollTo({
+                    top: document.getElementById("all-products")?.offsetTop || 0,
+                    behavior: "smooth",
+                  });
+                }
+              }}
               className="bg-[#003DA5] hover:bg-[#003DA5]/90 text-white px-8"
             >
               <ShoppingBag className="w-5 h-5 mr-2" />
@@ -181,7 +186,7 @@ export default function StorePage() {
                   onFiltersChange={handleFiltersChange}
                   onSortChange={handleSortChange}
                   onReset={handleResetFilters}
-                  isOpen={showFilters || window.innerWidth >= 1024}
+                  isOpen={showFilters || (useWindowSize().width ?? 0) >= 1024}
                   onToggle={() => setShowFilters(!showFilters)}
                 />
               </div>
