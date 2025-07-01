@@ -11,6 +11,8 @@ import { CartProvider } from "@/hooks/use-cart";
 import { CartSidebar } from "@/components/cart/cart-sidebar";
 import { Toaster } from "@/components/ui/sonner";
 import PerformanceOptimizer from "@/components/performance-optimizer";
+import SiteHealthChecker from "@/components/site-health-checker";
+import LaunchChecklist from "@/components/launch-checklist";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -64,6 +66,8 @@ export default function RootLayout({
             <FloatingWhatsApp />
             <CartSidebar />
             <Toaster position="top-right" richColors />
+            <SiteHealthChecker />
+            <LaunchChecklist />
           </CartProvider>
         </ThemeProvider>
       </body>
