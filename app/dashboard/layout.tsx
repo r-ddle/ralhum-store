@@ -84,7 +84,9 @@ function DashboardContent({ children }: DashboardLayoutProps) {
   useEffect(() => {
     if (status === "loading") return;
 
+    // Only redirect if we're not on login page and no session
     if (!session && pathname !== "/dashboard/login") {
+      console.log("No session, redirecting to login");
       router.push("/dashboard/login");
     }
   }, [session, status, router, pathname]);
@@ -231,10 +233,14 @@ function SidebarContent({
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
-    <SessionProvider>
-      <QueryProvider>
-        <DashboardContent>{children}</DashboardContent>
-      </QueryProvider>
-    </SessionProvider>
+    <html lang="en">
+      <body className="bg-gray-100">
+        <SessionProvider>
+          <QueryProvider>
+            <DashboardContent>{children}</DashboardContent>
+          </QueryProvider>
+        </SessionProvider>
+      </body>
+    </html>
   );
 }
