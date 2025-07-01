@@ -21,7 +21,7 @@ interface Product {
   status: string;
   category: { categoryName: string };
   brand: { brandName: string };
-  images: string[];
+  images: string;
   createdAt: string;
 }
 
@@ -202,19 +202,11 @@ export default function ProductsPage() {
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
                             <div className="h-10 w-10 flex-shrink-0">
-                              {product.images?.[0] ? (
-                                <img
-                                  className="h-10 w-10 rounded-lg object-cover"
-                                  src={product.images[0]}
-                                  alt={product.productName}
-                                />
-                              ) : (
-                                <div className="h-10 w-10 rounded-lg bg-gray-200 flex items-center justify-center">
-                                  <span className="text-gray-400 text-xs">
-                                    No image
-                                  </span>
-                                </div>
-                              )}
+                              <div className="h-10 w-10 rounded-lg bg-gray-200 flex items-center justify-center">
+                                <span className="text-gray-400 text-xs">
+                                  📦
+                                </span>
+                              </div>
                             </div>
                             <div className="ml-4">
                               <div className="text-sm font-medium text-gray-900">

@@ -20,7 +20,7 @@ const productSchema = z.object({
   freeShipping: z.boolean().default(false),
   islandWideDelivery: z.boolean().default(false),
   easyReturn: z.boolean().default(false),
-  images: z.array(z.string()).default([]),
+  images: z.string().optional(),
   skuCode: z.string().min(1, "SKU code is required"),
   stockQuantity: z.number().min(0, "Stock quantity must be positive"),
   status: z
