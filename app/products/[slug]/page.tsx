@@ -2,12 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { Product, ProductVariant } from "@/types/product";
-import {
-  getProductBySlug,
-  getProductsByBrand,
-  formatPrice,
-  getProductPrice,
-} from "@/lib/products";
+import { getProductBySlug, getProductsByBrand } from "@/lib/products";
+import { formatLKR, convertUsdToLkr, getPriceDisplay } from "@/lib/currency";
 import { useCart } from "@/hooks/use-cart";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -263,26 +259,30 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
               <div className="space-y-2">
                 <div className="flex items-baseline gap-3">
                   <span className="text-3xl font-black text-gray-900 dark:text-white">
-                    {formatPrice(selectedVariant.price)}
+                    {formatLKR(convertUsdToLkr(selectedVariant.price))}
                   </span>
                   {selectedVariant.compareAtPrice &&
                     selectedVariant.compareAtPrice > selectedVariant.price && (
                       <>
                         <span className="text-xl text-gray-500 line-through">
-                          {formatPrice(selectedVariant.compareAtPrice)}
+                          {formatLKR(
+                            convertUsdToLkr(selectedVariant.compareAtPrice),
+                          )}
                         </span>
                         <Badge className="bg-[#FF3D00] text-white font-bold">
                           SAVE{" "}
-                          {formatPrice(
-                            selectedVariant.compareAtPrice -
-                              selectedVariant.price,
+                          {formatLKR(
+                            convertUsdToLkr(
+                              selectedVariant.compareAtPrice -
+                                selectedVariant.price,
+                            ),
                           )}
                         </Badge>
                       </>
                     )}
                 </div>
                 <p className="text-sm text-gray-600">
-                  Price includes tax. Free shipping on orders over $75.
+                  Price includes tax. Free shipping on orders over LKR 23,625.
                 </p>
               </div>
 
@@ -338,7 +338,7 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
                       >
                         <div className="font-medium">{variant.name}</div>
                         <div className="text-sm text-gray-600">
-                          {formatPrice(variant.price)}
+                          {formatLKR(convertUsdToLkr(variant.price))}
                           {variant.inventory <= 5 && variant.inventory > 0 && (
                             <span className="text-orange-600 ml-2">
                               • Low stock

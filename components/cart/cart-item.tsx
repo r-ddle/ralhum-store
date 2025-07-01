@@ -4,7 +4,7 @@ import { CartItem as ICartItem } from "@/types/cart";
 import { useCart } from "@/hooks/use-cart";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { formatPrice } from "@/lib/products";
+import { formatLKR, convertUsdToLkr } from "@/lib/currency";
 import { Minus, Plus, Trash2, AlertCircle } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -88,11 +88,11 @@ export function CartItem({ item }: CartItemProps) {
         <div className="flex items-center justify-between">
           <div className="flex flex-col">
             <span className="font-bold text-gray-900">
-              {formatPrice(item.variant.price * item.quantity)}
+              {formatLKR(convertUsdToLkr(item.variant.price * item.quantity))}
             </span>
             {item.quantity > 1 && (
               <span className="text-xs text-gray-600">
-                {formatPrice(item.variant.price)} each
+                {formatLKR(convertUsdToLkr(item.variant.price))} each
               </span>
             )}
           </div>
@@ -144,16 +144,21 @@ export function CartItem({ item }: CartItemProps) {
           item.variant.compareAtPrice > item.variant.price && (
             <div className="mt-1">
               <span className="text-xs text-gray-500 line-through">
-                Was {formatPrice(item.variant.compareAtPrice * item.quantity)}
+                Was{" "}
+                {formatLKR(
+                  convertUsdToLkr(item.variant.compareAtPrice * item.quantity),
+                )}
               </span>
               <Badge
                 variant="secondary"
                 className="ml-2 bg-[#FF3D00] text-white text-xs"
               >
                 SAVE{" "}
-                {formatPrice(
-                  (item.variant.compareAtPrice - item.variant.price) *
-                    item.quantity,
+                {formatLKR(
+                  convertUsdToLkr(
+                    (item.variant.compareAtPrice - item.variant.price) *
+                      item.quantity,
+                  ),
                 )}
               </Badge>
             </div>

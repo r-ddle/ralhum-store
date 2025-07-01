@@ -6,7 +6,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Star, ShoppingCart, Eye } from "lucide-react";
-import { formatPrice, getProductPrice } from "@/lib/products";
+import { getProductPriceDisplay } from "@/lib/products-pricing";
+import { formatLKR, convertUsdToLkr } from "@/lib/currency";
 import Link from "next/link";
 
 interface ProductCardProps {
@@ -23,7 +24,7 @@ export function ProductCard({
   showCategory = true,
 }: ProductCardProps) {
   const { addItem } = useCart();
-  const price = getProductPrice(product);
+  const priceDisplay = getProductPriceDisplay(product);
   const primaryImage = product.images[0];
   const inStock = product.variants.some((v) => v.inventory > 0);
 
@@ -110,20 +111,16 @@ export function ProductCard({
                     <span className="text-sm text-gray-600 ml-1">(4.2)</span>
                   </div>
                   <div className="text-right">
-                    {price.min === price.max ? (
-                      <span className="text-xl font-bold text-[#1A1A1A]">
-                        {formatPrice(price.min)}
-                      </span>
-                    ) : (
-                      <span className="text-xl font-bold text-[#1A1A1A]">
-                        {formatPrice(price.min)} - {formatPrice(price.max)}
-                      </span>
-                    )}
+                    <span className="text-xl font-bold text-[#1A1A1A]">
+                      {priceDisplay.lkrFormatted}
+                    </span>
                     {product.variants.some((v) => v.compareAtPrice) && (
                       <span className="text-sm text-gray-500 line-through ml-2">
-                        {formatPrice(
-                          product.variants.find((v) => v.compareAtPrice)
-                            ?.compareAtPrice || 0,
+                        {formatLKR(
+                          convertUsdToLkr(
+                            product.variants.find((v) => v.compareAtPrice)
+                              ?.compareAtPrice || 0,
+                          ),
                         )}
                       </span>
                     )}
@@ -278,20 +275,16 @@ export function ProductCard({
           {/* Price */}
           <div className="flex items-center justify-between mb-4">
             <div>
-              {price.min === price.max ? (
-                <span className="text-xl font-bold text-[#1A1A1A]">
-                  {formatPrice(price.min)}
-                </span>
-              ) : (
-                <span className="text-xl font-bold text-[#1A1A1A]">
-                  {formatPrice(price.min)} - {formatPrice(price.max)}
-                </span>
-              )}
+              <span className="text-xl font-bold text-[#1A1A1A]">
+                {priceDisplay.lkrFormatted}
+              </span>
               {product.variants.some((v) => v.compareAtPrice) && (
                 <span className="text-sm text-gray-500 line-through ml-2">
-                  {formatPrice(
-                    product.variants.find((v) => v.compareAtPrice)
-                      ?.compareAtPrice || 0,
+                  {formatLKR(
+                    convertUsdToLkr(
+                      product.variants.find((v) => v.compareAtPrice)
+                        ?.compareAtPrice || 0,
+                    ),
                   )}
                 </span>
               )}
