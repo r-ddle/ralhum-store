@@ -17,7 +17,7 @@ import {
 } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import QueryProvider from "@/components/providers/query-provider";
 
 interface DashboardLayoutProps {
@@ -82,7 +82,7 @@ function DashboardContent({ children }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
-    if (status === "loading") return; // Still loading
+    if (status === "loading") return;
 
     if (!session && pathname !== "/dashboard/login") {
       router.push("/dashboard/login");
@@ -94,14 +94,10 @@ function DashboardContent({ children }: DashboardLayoutProps) {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading...</p>
+          <p className="mt-4 text-gray-600">Loading dashboard...</p>
         </div>
       </div>
     );
-  }
-
-  if (!session && pathname !== "/dashboard/login") {
-    return null; // Will redirect to login
   }
 
   if (pathname === "/dashboard/login") {
