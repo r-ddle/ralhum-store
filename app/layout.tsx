@@ -6,33 +6,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title:
-    "Ralhum Sports - Sri Lanka's #1 Sports Equipment Distributor & Online Store",
-  description:
-    "Shop premium sports equipment from world-renowned brands. Exclusive distributor of Gray-Nicolls, Gilbert, Grays & Molten in Sri Lanka. 25+ years of athletic excellence.",
-  keywords:
-    "sports equipment, cricket, rugby, basketball, hockey, tennis, Sri Lanka, Gray-Nicolls, Gilbert, Molten, Grays",
-  openGraph: {
-    title: "Ralhum Sports - Premium Sports Equipment Store",
-    description:
-      "Shop the best sports equipment from trusted global brands. Fast delivery across Sri Lanka.",
-    type: "website",
-    locale: "en_US",
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
-  },
-  verification: {
-    google: "your-google-verification-code",
-  },
+  title: "Ralhum Sports",
+  description: "Sports equipment store",
 };
 
 export default function RootLayout({
