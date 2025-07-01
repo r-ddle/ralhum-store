@@ -1,0 +1,88 @@
+@import "../../src/payload/styles/admin.css";
+
+/* Additional dashboard-specific styles */
+body {
+  margin: 0;
+  padding: 0;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
+    "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#payload-admin {
+  min-height: 100vh;
+  background: var(--theme-bg);
+}
+
+/* Ensure consistent spacing */
+.payload-app {
+  --gutter-h: 25px;
+  --gutter-v: 25px;
+}
+
+/* Loading animation */
+.payload-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+}
+
+.payload-loading::after {
+  content: "";
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--theme-primary);
+  border-top: 4px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Mobile responsiveness for dashboard */
+@media (max-width: 768px) {
+  .payload-app {
+    --gutter-h: 15px;
+    --gutter-v: 15px;
+  }
+
+  /* Adjust table spacing on mobile */
+  .table {
+    font-size: 0.875rem;
+  }
+
+  /* Stack form fields on mobile */
+  .form-field {
+    margin-bottom: 1rem;
+  }
+}
+
+/* Custom error styles */
+.payload-error {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  border: 1px solid #f87171;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+  color: #991b1b;
+}
+
+.payload-error h3 {
+  margin: 0 0 0.5rem 0;
+  font-weight: 600;
+}
+
+.payload-error p {
+  margin: 0;
+  font-size: 0.875rem;
+}
