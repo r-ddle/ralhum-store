@@ -17,7 +17,6 @@ import { Separator } from "@/components/ui/separator";
 import { ProductCard } from "@/components/product-card";
 import {
   ShoppingCart,
-  Heart,
   Share2,
   Star,
   Check,
@@ -47,7 +46,6 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
   );
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
-  const [isWishlisted, setIsWishlisted] = useState(false);
   const [loading, setLoading] = useState(true);
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
 
@@ -181,18 +179,8 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
                   )}
                 </div>
 
-                {/* Wishlist & Share */}
-                <div className="absolute top-4 right-4 flex flex-col gap-2">
-                  <Button
-                    size="sm"
-                    variant="secondary"
-                    onClick={() => setIsWishlisted(!isWishlisted)}
-                    className="w-10 h-10 p-0 rounded-full bg-white/90 hover:bg-white"
-                  >
-                    <Heart
-                      className={`w-5 h-5 ${isWishlisted ? "fill-red-500 text-red-500" : "text-gray-600"}`}
-                    />
-                  </Button>
+                {/* Share Button */}
+                <div className="absolute top-4 right-4">
                   <Button
                     size="sm"
                     variant="secondary"
@@ -420,22 +408,13 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
                   {isOutOfStock ? "Out of Stock" : "Add to Cart"}
                 </Button>
 
-                <div className="grid grid-cols-2 gap-3">
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    onClick={() => setIsWishlisted(!isWishlisted)}
-                    className="font-bold border-2 border-[#003DA5] text-[#003DA5] hover:bg-[#003DA5] hover:text-white"
-                  >
-                    <Heart
-                      className={`w-5 h-5 mr-2 ${isWishlisted ? "fill-current" : ""}`}
-                    />
-                    {isWishlisted ? "Saved" : "Save"}
-                  </Button>
-                  <Button variant="outline" size="lg" className="font-bold">
-                    Buy Now
-                  </Button>
-                </div>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="w-full font-bold border-2 border-[#003DA5] text-[#003DA5] hover:bg-[#003DA5] hover:text-white"
+                >
+                  Buy Now
+                </Button>
               </div>
 
               {/* Trust Badges */}

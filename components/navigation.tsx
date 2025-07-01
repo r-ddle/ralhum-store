@@ -2,15 +2,13 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Menu, X, Phone, Search, User, Heart } from "lucide-react";
+import { Menu, X, Phone, User } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { CartButton } from "@/components/cart/cart-button";
 import Link from "next/link";
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
-  const [showSearch, setShowSearch] = useState(false);
 
   const navItems = [
     { name: "Home", href: "/" },
@@ -37,18 +35,6 @@ export default function Navigation() {
             </Link>
           </div>
 
-          {/* Search Bar - Desktop */}
-          <div className="hidden lg:flex flex-1 max-w-md mx-8">
-            <div className="relative w-full">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-              <Input
-                type="text"
-                placeholder="Search products, brands..."
-                className="pl-10 pr-4 w-full bg-gray-50 dark:bg-gray-800 border-gray-300 dark:border-gray-600 focus:border-[#003DA5] focus:ring-[#003DA5] rounded-full"
-              />
-            </div>
-          </div>
-
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-6">
             {navItems.map((item) => (
@@ -65,30 +51,6 @@ export default function Navigation() {
 
           {/* Desktop Actions */}
           <div className="hidden md:flex items-center space-x-2">
-            {/* Search Button - Tablet */}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setShowSearch(!showSearch)}
-              className="lg:hidden p-2 hover:bg-gray-100 dark:hover:bg-gray-800"
-              aria-label="Search"
-            >
-              <Search className="w-5 h-5" />
-            </Button>
-
-            {/* Wishlist */}
-            <Button
-              variant="ghost"
-              size="sm"
-              className="relative p-2 hover:bg-gray-100 dark:hover:bg-gray-800"
-              aria-label="Wishlist"
-            >
-              <Heart className="w-5 h-5" />
-              {/* <Badge variant="destructive" className="absolute -top-1 -right-1 h-4 w-4 flex items-center justify-center p-0 text-xs">
-                3
-              </Badge> */}
-            </Button>
-
             {/* Cart */}
             <CartButton />
 
@@ -118,16 +80,6 @@ export default function Navigation() {
 
           {/* Mobile Actions */}
           <div className="md:hidden flex items-center space-x-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setShowSearch(!showSearch)}
-              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800"
-              aria-label="Search"
-            >
-              <Search className="w-5 h-5" />
-            </Button>
-
             <CartButton />
             <ThemeToggle />
 
@@ -148,21 +100,6 @@ export default function Navigation() {
             </Button>
           </div>
         </div>
-
-        {/* Mobile Search Bar */}
-        {showSearch && (
-          <div className="lg:hidden px-4 py-3 border-t border-gray-200 dark:border-gray-700">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-              <Input
-                type="text"
-                placeholder="Search products, brands..."
-                className="pl-10 pr-4 w-full bg-gray-50 dark:bg-gray-800 border-gray-300 dark:border-gray-600 focus:border-[#003DA5] focus:ring-[#003DA5] rounded-full"
-                autoFocus
-              />
-            </div>
-          </div>
-        )}
 
         {/* Mobile Navigation */}
         {isOpen && (
