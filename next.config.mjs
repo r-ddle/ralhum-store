@@ -1,4 +1,3 @@
-import { withPayload } from "@payloadcms/next/withPayload";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -82,4 +81,4 @@ const nextConfig = {
   },
 };
 
-export default withPayload(nextConfig);
+export default nextConfig;
