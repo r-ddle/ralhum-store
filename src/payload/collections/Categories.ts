@@ -1,4 +1,4 @@
-import { CollectionConfig } from "payload/types";
+import type { CollectionConfig } from "payload";
 
 const isAdminOrProductManager = ({ req: { user } }) => {
   return user?.role === "admin" || user?.role === "product-manager";
