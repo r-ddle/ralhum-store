@@ -1,11 +1,20 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { Calendar, User, ArrowRight, Search, Trophy, Award, TrendingUp, Globe } from "lucide-react"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import {
+  Calendar,
+  User,
+  ArrowRight,
+  Search,
+  Trophy,
+  Award,
+  TrendingUp,
+  Globe,
+} from "lucide-react";
 
 const newsCategories = [
   "All News",
@@ -14,12 +23,13 @@ const newsCategories = [
   "Sports Events",
   "Product Launches",
   "Industry Insights",
-]
+];
 
 const featuredNews = [
   {
     id: 1,
-    title: "Ralhum Sports Announces Exclusive Partnership with New International Brand",
+    title:
+      "Ralhum Sports Announces Exclusive Partnership with New International Brand",
     excerpt:
       "We're excited to announce our latest partnership that will bring even more world-class sports equipment to Sri Lankan athletes and sports enthusiasts.",
     content:
@@ -59,7 +69,7 @@ const featuredNews = [
     featured: true,
     readTime: "4 min read",
   },
-]
+];
 
 const allNews = [
   ...featuredNews,
@@ -110,7 +120,8 @@ const allNews = [
     title: "Grays Hockey Equipment Chosen for National Championships",
     excerpt:
       "The Sri Lankan Hockey Federation has selected Grays equipment as the official supplier for national championships.",
-    content: "This partnership highlights the trust placed in Grays equipment by professional hockey organizations.",
+    content:
+      "This partnership highlights the trust placed in Grays equipment by professional hockey organizations.",
     category: "Sports Events",
     date: "2023-12-28",
     author: "Hockey Federation",
@@ -123,7 +134,8 @@ const allNews = [
     title: "Expanding Our Reach: New Dealer Network Across Sri Lanka",
     excerpt:
       "Ralhum Sports continues to expand its dealer network to bring quality sports equipment closer to customers nationwide.",
-    content: "Our growing network ensures that authentic sports equipment is accessible in every corner of Sri Lanka.",
+    content:
+      "Our growing network ensures that authentic sports equipment is accessible in every corner of Sri Lanka.",
     category: "Company Updates",
     date: "2023-12-25",
     author: "Business Development",
@@ -131,50 +143,51 @@ const allNews = [
     featured: false,
     readTime: "4 min read",
   },
-]
+];
 
 export default function NewsPage() {
-  const [selectedCategory, setSelectedCategory] = useState("All News")
-  const [searchTerm, setSearchTerm] = useState("")
+  const [selectedCategory, setSelectedCategory] = useState("All News");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const filteredNews = allNews.filter((article) => {
-    const matchesCategory = selectedCategory === "All News" || article.category === selectedCategory
+    const matchesCategory =
+      selectedCategory === "All News" || article.category === selectedCategory;
     const matchesSearch =
       article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       article.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      article.category.toLowerCase().includes(searchTerm.toLowerCase())
-    return matchesCategory && matchesSearch
-  })
+      article.category.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
       case "Company Updates":
-        return TrendingUp
+        return TrendingUp;
       case "New Partnerships":
-        return Globe
+        return Globe;
       case "Sports Events":
-        return Trophy
+        return Trophy;
       case "Product Launches":
-        return Award
+        return Award;
       default:
-        return Calendar
+        return Calendar;
     }
-  }
+  };
 
   const getCategoryColor = (category: string) => {
     switch (category) {
       case "Company Updates":
-        return "bg-[#003DA5]"
+        return "bg-[#003DA5]";
       case "New Partnerships":
-        return "bg-[#FF3D00]"
+        return "bg-[#FF3D00]";
       case "Sports Events":
-        return "bg-[#FFD700]"
+        return "bg-[#FFD700]";
       case "Product Launches":
-        return "bg-[#AEEA00]"
+        return "bg-[#AEEA00]";
       default:
-        return "bg-gray-500"
+        return "bg-gray-500";
     }
-  }
+  };
 
   return (
     <main className="min-h-screen pt-16">
@@ -187,13 +200,16 @@ export default function NewsPage() {
 
         <div className="max-w-7xl mx-auto px-4 relative z-10">
           <div className="text-center">
-            <Badge className="bg-[#FFD700] text-[#1A1A1A] px-6 py-2 text-sm font-bold mb-4">LATEST UPDATES</Badge>
+            <Badge className="bg-[#FFD700] text-[#1A1A1A] px-6 py-2 text-sm font-bold mb-4">
+              LATEST UPDATES
+            </Badge>
             <h1 className="text-4xl md:text-6xl font-black mb-6">
               NEWS &<span className="block text-[#FF3D00]">ANNOUNCEMENTS</span>
             </h1>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
-              Stay updated with the latest news from Ralhum Sports, including new partnerships, product launches,
-              company milestones, and insights from the sports equipment industry.
+              Stay updated with the latest news from Ralhum Sports, including
+              new partnerships, product launches, company milestones, and
+              insights from the sports equipment industry.
             </p>
 
             {/* Search Bar */}
@@ -215,7 +231,9 @@ export default function NewsPage() {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
-            <Badge className="bg-[#FF3D00] text-white px-6 py-2 text-sm font-bold mb-4">FEATURED STORIES</Badge>
+            <Badge className="bg-[#FF3D00] text-white px-6 py-2 text-sm font-bold mb-4">
+              FEATURED STORIES
+            </Badge>
             <h2 className="text-4xl md:text-5xl font-black text-[#1A1A1A] mb-6">
               LATEST
               <span className="block text-[#003DA5]">HIGHLIGHTS</span>
@@ -235,10 +253,14 @@ export default function NewsPage() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                     <div className="absolute bottom-6 left-6 right-6">
-                      <Badge className={`${getCategoryColor(featuredNews[0].category)} text-white mb-3 font-bold`}>
+                      <Badge
+                        className={`${getCategoryColor(featuredNews[0].category)} text-white mb-3 font-bold`}
+                      >
                         {featuredNews[0].category}
                       </Badge>
-                      <h3 className="text-2xl lg:text-3xl font-black text-white mb-2">{featuredNews[0].title}</h3>
+                      <h3 className="text-2xl lg:text-3xl font-black text-white mb-2">
+                        {featuredNews[0].title}
+                      </h3>
                       <div className="flex items-center gap-4 text-white/80 text-sm">
                         <span className="flex items-center gap-1">
                           <Calendar className="w-4 h-4" />
@@ -253,10 +275,22 @@ export default function NewsPage() {
                     </div>
                   </div>
                   <div className="p-6">
-                    <p className="text-gray-600 mb-4 leading-relaxed">{featuredNews[0].excerpt}</p>
-                    <Button className="bg-[#FF3D00] hover:bg-[#FF3D00]/90 text-white font-bold rounded-full">
-                      READ FULL ARTICLE
-                      <ArrowRight className="w-4 h-4 ml-2" />
+                    <p className="text-gray-600 mb-4 leading-relaxed">
+                      {featuredNews[0].excerpt}
+                    </p>
+                    <Button
+                      className="bg-[#FF3D00] hover:bg-[#FF3D00]/90 text-white font-bold rounded-full"
+                      asChild
+                    >
+                      <a
+                        href={`/news/${featuredNews[0].title
+                          .toLowerCase()
+                          .replace(/[^a-z0-9]+/g, "-")
+                          .replace(/(^-|-$)/g, "")}`}
+                      >
+                        READ FULL ARTICLE
+                        <ArrowRight className="w-4 h-4 ml-2" />
+                      </a>
                     </Button>
                   </div>
                 </CardContent>
@@ -285,10 +319,16 @@ export default function NewsPage() {
                       </Badge>
                     </div>
                     <div className="p-4">
-                      <h4 className="font-black text-lg mb-2 line-clamp-2">{article.title}</h4>
-                      <p className="text-gray-600 text-sm mb-3 line-clamp-2">{article.excerpt}</p>
+                      <h4 className="font-black text-lg mb-2 line-clamp-2">
+                        {article.title}
+                      </h4>
+                      <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+                        {article.excerpt}
+                      </p>
                       <div className="flex items-center justify-between text-xs text-gray-500">
-                        <span>{new Date(article.date).toLocaleDateString()}</span>
+                        <span>
+                          {new Date(article.date).toLocaleDateString()}
+                        </span>
                         <span>{article.readTime}</span>
                       </div>
                     </div>
@@ -304,7 +344,9 @@ export default function NewsPage() {
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
-            <Badge className="bg-[#AEEA00] text-[#1A1A1A] px-6 py-2 text-sm font-bold mb-4">ALL ARTICLES</Badge>
+            <Badge className="bg-[#AEEA00] text-[#1A1A1A] px-6 py-2 text-sm font-bold mb-4">
+              ALL ARTICLES
+            </Badge>
             <h2 className="text-4xl md:text-5xl font-black text-[#1A1A1A] mb-6">
               COMPLETE
               <span className="block text-[#FF3D00]">NEWS ARCHIVE</span>
@@ -332,7 +374,7 @@ export default function NewsPage() {
           {/* News Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 px-4">
             {filteredNews.map((article) => {
-              const IconComponent = getCategoryIcon(article.category)
+              const IconComponent = getCategoryIcon(article.category);
               return (
                 <Card
                   key={article.id}
@@ -378,31 +420,43 @@ export default function NewsPage() {
                             <Calendar className="w-3 sm:w-4 h-3 sm:h-4" />
                             {new Date(article.date).toLocaleDateString()}
                           </span>
-                          <span className="hidden sm:inline">{article.readTime}</span>
+                          <span className="hidden sm:inline">
+                            {article.readTime}
+                          </span>
                         </div>
                       </div>
 
                       <Button
                         variant="outline"
                         className="w-full border-[#003DA5] text-[#003DA5] hover:bg-[#003DA5] hover:text-white font-bold transition-all duration-300 text-sm sm:text-base py-2 sm:py-3"
+                        asChild
                       >
-                        READ MORE
-                        <ArrowRight className="w-3 sm:w-4 h-3 sm:h-4 ml-2" />
+                        <a
+                          href={`/news/${article.title
+                            .toLowerCase()
+                            .replace(/[^a-z0-9]+/g, "-")
+                            .replace(/(^-|-$)/g, "")}`}
+                        >
+                          READ MORE
+                          <ArrowRight className="w-3 sm:w-4 h-3 sm:h-4 ml-2" />
+                        </a>
                       </Button>
                     </div>
                   </CardContent>
                 </Card>
-              )
+              );
             })}
           </div>
 
           {filteredNews.length === 0 && (
             <div className="text-center py-12">
-              <p className="text-gray-500 text-lg">No articles found matching your criteria.</p>
+              <p className="text-gray-500 text-lg">
+                No articles found matching your criteria.
+              </p>
               <Button
                 onClick={() => {
-                  setSelectedCategory("All News")
-                  setSearchTerm("")
+                  setSelectedCategory("All News");
+                  setSearchTerm("");
                 }}
                 className="mt-4 bg-[#003DA5] hover:bg-[#003DA5]/90 text-white"
               >
@@ -416,10 +470,12 @@ export default function NewsPage() {
       {/* Newsletter Signup */}
       <section className="py-12 sm:py-16 bg-gradient-to-r from-[#003DA5] to-[#FF3D00] text-white">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black mb-4">STAY UPDATED</h2>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black mb-4">
+            STAY UPDATED
+          </h2>
           <p className="text-base sm:text-xl mb-6 sm:mb-8 opacity-90 px-4">
-            Subscribe to our newsletter to receive the latest news, product launches, and exclusive updates directly in
-            your inbox.
+            Subscribe to our newsletter to receive the latest news, product
+            launches, and exclusive updates directly in your inbox.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center max-w-md mx-auto px-4">
             <Input
@@ -437,5 +493,5 @@ export default function NewsPage() {
         </div>
       </section>
     </main>
-  )
+  );
 }
