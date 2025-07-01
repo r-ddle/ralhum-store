@@ -21,7 +21,7 @@ async function fetchDashboardStats() {
 
 export default function DashboardPage() {
   const { data: session } = useSession();
-  
+
   const { data: stats, isLoading } = useQuery({
     queryKey: ["dashboard-stats"],
     queryFn: fetchDashboardStats,
@@ -75,7 +75,8 @@ export default function DashboardPage() {
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-gray-900">Dashboard Overview</h1>
         <p className="mt-1 text-sm text-gray-600">
-          Welcome back, {session?.user?.name}! Here's what's happening with your store.
+          Welcome back, {session?.user?.name}! Here's what's happening with your
+          store.
         </p>
       </div>
 
@@ -109,7 +110,9 @@ export default function DashboardPage() {
 
       {/* Quick Actions */}
       <div className="mt-8">
-        <h2 className="text-lg font-medium text-gray-900 mb-4">Quick Actions</h2>
+        <h2 className="text-lg font-medium text-gray-900 mb-4">
+          Quick Actions
+        </h2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <a
             href="/dashboard/products/new"
@@ -189,17 +192,20 @@ export default function DashboardPage() {
                 Check and manage customer orders.
               </p>
             </div>
-          </div>
+          </a>
         </div>
       </div>
 
       {/* Recent Activity */}
       <div className="mt-8">
-        <h2 className="text-lg font-medium text-gray-900 mb-4">Recent Activity</h2>
+        <h2 className="text-lg font-medium text-gray-900 mb-4">
+          Recent Activity
+        </h2>
         <div className="bg-white shadow rounded-lg">
           <div className="p-6">
             <p className="text-gray-500 text-center">
-              Recent activity will appear here once you start using the dashboard.
+              Recent activity will appear here once you start using the
+              dashboard.
             </p>
           </div>
         </div>
