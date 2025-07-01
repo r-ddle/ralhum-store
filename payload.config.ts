@@ -53,16 +53,7 @@ export default buildConfig({
   },
 
   plugins: [
-    seoPlugin({
-      collections: ["products", "news"],
-      uploadsCollection: "media",
-      generateTitle: ({ doc }) =>
-        `${doc?.title?.value || doc?.name?.value || "Untitled"} | Ralhum Sports`,
-      generateDescription: ({ doc }) =>
-        doc?.excerpt?.value ||
-        doc?.description?.value ||
-        "Ralhum Sports - Premium Sports Equipment",
-    }),
+    // seoPlugin will be added after initial setup
   ],
 
   cors: [
